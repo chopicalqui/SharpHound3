@@ -112,6 +112,7 @@
     <Compile Include="LdapWrappers\LdapWrapper.cs" />
     <Compile Include="LdapWrappers\Group.cs" />
     <Compile Include="LdapWrappers\OU.cs" />
+    <Compile Include="LdapWrappers\Share.cs" />
     <Compile Include="LdapWrappers\User.cs" />
     <Compile Include="Producers\BaseProducer.cs" />
     <Compile Include="Producers\ComputerFileProducer.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="DirectorySearch.cs" />
     <Compile Include="Tasks\ComputerAvailableTasks.cs" />
     <Compile Include="Tasks\ContainerTasks.cs" />
+    <Compile Include="Tasks\NetShareEnumTasks.cs" />
     <Compile Include="Tasks\GPOGroupTasks.cs" />
     <Compile Include="Tasks\GroupEnumerationTasks.cs" />
     <Compile Include="Options.cs" />

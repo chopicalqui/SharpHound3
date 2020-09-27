@@ -37,6 +37,7 @@ SharpHound is designed targetting .Net 4.5. Sharphound must be run from the cont
   - **ACL** - Performs collection of ACLs
   - **Container** - Performs collection of Containers
   - **DcOnly** - Performs collection using LDAP only. Includes Group, Trusts, ACL, ObjectProps, Container, and GPOLocalGroup.
+  - **Share** - Performs collection of network shares and first directory level as well as their access permissions
   - **All** - Performs all Collection Methods except GPOLocalGroup
 - **Domain** - Search a particular domain. Uses your current domain if null (Default: null)
 - **Stealth** - Performs stealth collection methods. All stealth options are single threaded.

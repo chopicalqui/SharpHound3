@@ -25,6 +25,7 @@ namespace SharpHound3.Enums
         Default,
         DCOnly,
         ComputerOnly,
+        Share,
         All
     }
 
@@ -49,6 +50,7 @@ namespace SharpHound3.Enums
         Container = 1 << 11,
         GPOLocalGroup = 1 << 12,
         DCOnly = 1 << 13,
+        Shares = 1 << 14,
         LocalGroups = DCOM | RDP | LocalAdmin | PSRemote
     }
 }

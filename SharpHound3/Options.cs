@@ -11,7 +11,7 @@ namespace SharpHound3
         public static Options Instance { get; set; }
 
         //Collection Options
-        [Option('c', "CollectionMethod", Default = new[] { "Default" }, HelpText = "Collection Methods: Container, Group, LocalGroup, GPOLocalGroup, Session, LoggedOn, ObjectProps, ACL, ComputerOnly, Trusts, Default, RDP, DCOM, DCOnly")]
+        [Option('c', "CollectionMethod", Default = new[] { "Default" }, HelpText = "Collection Methods: Container, Group, LocalGroup, GPOLocalGroup, Session, LoggedOn, ObjectProps, ACL, ComputerOnly, Trusts, Default, RDP, DCOM, DCOnly, Share")]
         public IEnumerable<string> CollectionMethods { get; set; }
 
         [Option(HelpText = "Use Stealth Targetting/Enumeration Options", Default = false)]
@@ -169,7 +169,7 @@ namespace SharpHound3
                                    CollectionMethodResolved.Group | CollectionMethodResolved.LocalGroups |
                                    CollectionMethodResolved.ObjectProps | CollectionMethodResolved.Sessions |
                                    CollectionMethodResolved.Trusts | CollectionMethodResolved.LoggedOn |
-                                   CollectionMethodResolved.SPNTargets;
+                                   CollectionMethodResolved.SPNTargets | CollectionMethodResolved.Shares;
                         break;
                     case CollectionMethodOptions.DCOnly:
                         resolved = resolved | CollectionMethodResolved.ACL | CollectionMethodResolved.Container |
@@ -219,6 +219,9 @@ namespace SharpHound3
                     case CollectionMethodOptions.LocalGroup:
                         resolved |= CollectionMethodResolved.LocalGroups;
                         break;
+                    case CollectionMethodOptions.Share:
+                        resolved |= CollectionMethodResolved.Shares;
+                        break;
                     case CollectionMethodOptions.Default:
                         resolved = resolved | CollectionMethodResolved.ACL | CollectionMethodResolved.Container |
                                    CollectionMethodResolved.Group | CollectionMethodResolved.LocalGroups |
@@ -226,7 +229,7 @@ namespace SharpHound3
                                    CollectionMethodResolved.Trusts | CollectionMethodResolved.SPNTargets;
                         break;
                     case CollectionMethodOptions.ComputerOnly:
-                        resolved = resolved | CollectionMethodResolved.LocalGroups | CollectionMethodResolved.Sessions;
+                        resolved = resolved | CollectionMethodResolved.LocalGroups | CollectionMethodResolved.Sessions | CollectionMethodResolved.Shares;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -272,6 +275,12 @@ namespace SharpHound3
                     updates.Add("[-] Removed LocalAdmin Collection");
                 }
 
+                if ((resolved & CollectionMethodResolved.Shares) != 0)
+                {
+                    resolved ^= CollectionMethodResolved.Shares;
+                    updates.Add("[-] Removed FileShares Collection");
+                }
+
                 if (localGroupRemoved)
                 {
                     resolved |= CollectionMethodResolved.GPOLocalGroup;
@@ -315,7 +324,8 @@ namespace SharpHound3
                    (ResolvedCollectionMethods & CollectionMethodResolved.RDP) != 0 ||
                    (ResolvedCollectionMethods & CollectionMethodResolved.DCOM) != 0 ||
                    (ResolvedCollectionMethods & CollectionMethodResolved.PSRemote) != 0 ||
-                   (ResolvedCollectionMethods & CollectionMethodResolved.LoggedOn) != 0;
+                   (ResolvedCollectionMethods & CollectionMethodResolved.LoggedOn) != 0 ||
+                   (ResolvedCollectionMethods & CollectionMethodResolved.Shares) != 0;
         }
     }
 }

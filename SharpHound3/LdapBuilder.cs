@@ -39,7 +39,8 @@ namespace SharpHound3
             if (methods.HasFlag(CollectionMethodResolved.LocalAdmin) ||
                 methods.HasFlag(CollectionMethodResolved.Sessions) ||
                 methods.HasFlag(CollectionMethodResolved.LoggedOn) || methods.HasFlag(CollectionMethodResolved.RDP) ||
-                methods.HasFlag(CollectionMethodResolved.DCOM) || methods.HasFlag(CollectionMethodResolved.PSRemote))
+                methods.HasFlag(CollectionMethodResolved.DCOM) || methods.HasFlag(CollectionMethodResolved.PSRemote) ||
+                methods.HasFlag(CollectionMethodResolved.Shares))
             {
                 ldapFilterParts.Add("(&(sAMAccountType=805306369)(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))");
             }

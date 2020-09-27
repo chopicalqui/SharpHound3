@@ -29,6 +29,8 @@ namespace SharpHound3.Tasks
         private static Lazy<JsonFileWriter> _domainOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("domains"), false);
         private static Lazy<JsonFileWriter> _gpoOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("gpos"), false);
         private static Lazy<JsonFileWriter> _ouOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("ous"), false);
+        private static Lazy<JsonFileWriter> _shareOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("shares"), false);
+        private static Lazy<JsonFileWriter> _fileSystemOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("fsitems"), false);
         private static int _lastCount;
         private static int _currentCount;
         private static Timer _statusTimer;
@@ -68,6 +70,14 @@ namespace SharpHound3.Tasks
             {
                 case Computer computer:
                     _computerOutput.Value.WriteObject(computer);
+                    // Write file shares
+                    foreach (var share in computer.Shares)
+                    {
+                        _shareOutput.Value.WriteObject(share);
+                        // Write file system items
+                        foreach (var fsItem in share.FileSystemItems)
+                            _fileSystemOutput.Value.WriteObject(fsItem);
+                    }
                     break;
                 case Domain domain:
                     _domainOutput.Value.WriteObject(domain);
@@ -84,6 +94,8 @@ namespace SharpHound3.Tasks
                 case User user:
                     _userOutput.Value.WriteObject(user);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             _currentCount++;
@@ -214,6 +226,10 @@ namespace SharpHound3.Tasks
                 _gpoOutput.Value.CloseWriter();
             if (_ouOutput.IsValueCreated)
                 _ouOutput.Value.CloseWriter();
+            if (_shareOutput.IsValueCreated)
+                _shareOutput.Value.CloseWriter();
+            if (_fileSystemOutput.IsValueCreated)
+                _fileSystemOutput.Value.CloseWriter();
 
             _userOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("users"), false);
             _groupOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("groups"), false);
@@ -221,6 +237,8 @@ namespace SharpHound3.Tasks
             _domainOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("domains"), false);
             _gpoOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("gpos"), false);
             _ouOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("ous"), false);
+            _shareOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("share"), false);
+            _fileSystemOutput = new Lazy<JsonFileWriter>(() => new JsonFileWriter("fsitems"), false);
 
             string finalName;
             var options = Options.Instance;

@@ -140,6 +140,12 @@ namespace SharpHound3.Tasks
                 blocks.Add(block);
             }
 
+            if ((resolvedMethods & CollectionMethodResolved.Shares) != 0)
+            {
+                block = new TransformBlock<LdapWrapper, LdapWrapper>(NetShareEnumTasks.ProcessNetShares, executionOptions);
+                blocks.Add(block);
+            }
+
             if (blocks.Count == 0)
             {
                 findTypeBlock.Complete();
